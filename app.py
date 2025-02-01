@@ -52,7 +52,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        # Retrieve user data from MongoDB
+        
         user = users_collection.find_one({"username": username})
         if user and user["password"] == hash_password(password):
             session["logged_in"] = True
