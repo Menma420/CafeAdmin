@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management</title>
+    <style>
+       /* Reset & Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("static/images/LoginBG.jpeg") center repeat;
+            background-size: contain;
+            color: white;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #9D0102;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h2 {
+            color: white;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+            color: #ff2f00;
+        }
+
+
+        /* Add Item Container */
+        .addcontainer {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .addcontainer h3 {
+            margin-bottom: 15px;
+            color: #ff2200;
+            
+        }
+
+        .addcontainer form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .addcontainer input,
+        .addcontainer button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        .addcontainer input {
+            background: #3F3F3F;
+            color: white;
+            transition: background 0.3s ease;
+        }
+
+        .addcontainer input:focus {
+            background: #555;
+        }
+
+        .addcontainer button {
+            background-color: #9D0102;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .addcontainer button:hover {
+            background-color: #ff0d00;
+            color: black;
+        }
+
+                /* Hide default checkbox */
+        input[type="checkbox"] {
+            appearance: none; /* Removes default styling */
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            background-color: transparent;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        /* Checkbox checked state */
+        input[type="checkbox"]:checked {
+            background-color: #FFD700; /* Gold background */
+            border: 2px solid #FFD700;
+        }
+
+        /* Custom tick (✓) */
+        input[type="checkbox"]::after {
+            content: '✓';
+            font-size: 16px;
+            color: black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        /* Show tick when checked */
+        input[type="checkbox"]:checked::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        input {
+            background: #3F3F3F;
+            color: white;
+        }
+
+        button {
+            background-color: #9D0102;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ee553a;
+            color: black;
+        }
+        
+
+        /* Availability Badge */
+        .availability-btn {
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: background 0.3s ease;
+            margin: 8px 12px;
+        }
+
+        .available {
+            background-color: green;
+        }
+
+        .not-available {
+            background-color: red;
+        }
+
+        .availability-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Availability Badge */
+        .availability-btn {
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: background 0.3s ease;
+            margin: 8px 12px;
+            display: inline-block; /* Ensure it's inline-block so it scales better */
+        }
+
+        /* Menu Items Table */
+        .itemcontainer table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #252525;
+            border-radius: 10px;
+            table-layout: fixed; /* Ensures columns have fixed widths */
+        }
+
+        .itemcontainer th,
+        .itemcontainer td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #444;
+            font-size: small;
+            word-wrap: break-word; /* Ensure content inside cells breaks properly */
+        }
+
+        /* Specific class for the cell with the availability button */
+        .itemcontainer td.availability-cell {
+            width: auto; /* Ensures it takes up just enough space for the button */
+        }
+
+        /* Rest of your styles remain unchanged */
+
+
+
+        /* Menu Items Table */
+        .itemcontainer {
+            max-width: 1300px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1E1E1E;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .itemcontainer h3 {
+            color: #d76a22;
+            margin-bottom: 15px;
+        }
+
+        .itemcontainer table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #252525;
+            border-radius: 10px;
+        }
+
+        .itemcontainer th,
+        .itemcontainer td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #444;
+            font-size: small;
+        }
+
+        .itemcontainer th {
+            background: #9D0102;
+            color: white;
+        }
+
+        .itemcontainer tr:hover {
+            background: #333;
+        }
+
+        .itemcontainer img {
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .itemcontainer img:hover {              
+            transform: scale(7);
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Menu Management</h2>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/orders">Orders</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="addcontainer">
+        <h3>Add a new item to the menu:</h3>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Item Name" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="number" name="price" step="0.01" placeholder="Price" required>
+            <input type="text" name="category" placeholder="Category" required>
+            <input type="url" name="image" placeholder="Image Link" required>
+            <input type="number" name="et" placeholder="Estimated Time (in Mins)" required>
+            <label>
+                <input type="checkbox" name="availability"> Available
+            </label>
+            <button type="submit">Add Item</button>
+        </form>
+        </div>
+        <div class="itemcontainer">
+        <h3>Menu Items:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th>Estimated Time</th>
+                    <th>Availability</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in menu_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.category }}</td>
+                        <td><img src="{{ item.image }}" alt="Image" width="50"></td>
+                        <td>{{ item.et }}</td>
+                        <td>
+                            <span class="availability-btn {{ 'available' if item.availability else 'not-available' }}">
+                                {{ 'Available' if item.availability else 'Not Available' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/update_availability/{{item._id}}" class="availability-btn {{ 'not-available' if item.availability else 'available' }}">
+                                {{ 'Mark Unavailable' if item.availability else 'Mark Available' }}
+                            </a>
+                        </td>
+                        <td>
+                            <form action="/delete_menu_item/{{item._id}}" method="POST" onsubmit="return confirmDelete(this);">
+                                <input type="password" name="password" placeholder="Enter password" required>
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(form) {
+            return confirm("Are you sure you want to delete this item?");
+        }
+    </script>
+</body>
+</html>

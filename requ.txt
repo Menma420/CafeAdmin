@@ -1,0 +1,4 @@
+
+
+VKHT3t7rWgPaJrdR
+pip install flask flask-pymongo flask-bcrypt flask-wtf flask-login
