@@ -33,16 +33,19 @@ def signup():
         username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
+        photo = request.form["photo"]
 
         # Check if the username already exists
         if users_collection.find_one({"username": username}):
-            return "Username already exists! <a href='/signup'>Try again</a>"
+            flash("Username Already Exist!!")
+            return render_template("signup.html")
 
         # Store the hashed password in MongoDB
         hashed_password = hash_password(password)
-        users_collection.insert_one({"username": username,"email": email,"password": hashed_password})
+        users_collection.insert_one({"username": username,"email": email,"password": hashed_password,"photo":photo})
+        flash("Account Created Successfully")
 
-        return "Signup Successful! <a href='/login'>Login</a>"
+        return redirect(url_for("login"))
     return render_template("signup.html")
 
 

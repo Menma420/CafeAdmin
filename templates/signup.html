@@ -110,9 +110,25 @@
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Create a password" required>
             </div>
+            <div class="input-group">
+                <label>Upload Photo Link</label>
+                <input type="url" name="photo" placeholder="Paste Link Here" required>
+            </div>
             <button type="submit">Signup</button>
         </form>
         <p class="bottom-text">Already have an account? <a href="/login">Login</a></p>
     </div>
+    <script>
+        // Display alert box if a message exists
+        window.onload = function() {
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        alert("{{ message }}");  // Show alert with the message
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        }
+    </script>
 </body>
 </html>
