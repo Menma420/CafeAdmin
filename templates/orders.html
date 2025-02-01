@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Orders</title>
     <style>
+        
         * {
             margin: 0;
             padding: 0;
@@ -202,6 +203,17 @@
             </tbody>
         </table>
     </div>
-
+    <script>
+        // Display alert box if a message exists
+        window.onload = function() {
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        alert("{{ message }}");  // Show alert with the message
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        }
+    </script>
 </body>
 </html>
