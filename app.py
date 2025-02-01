@@ -9,8 +9,8 @@ app.secret_key = "your_secret_key"  # Required for session handling
 
 # MongoDB Atlas Connection
 client = MongoClient("mongodb+srv://cafetrio606142:iiitcafe123@cluster0.k6mvr.mongodb.net/cafetrio?retryWrites=true&w=majority&appName=Cluster0")
-db = client["cafetrio"]  # Replace with your database name
-users_collection = db["admins"]  # Collection for storing user data
+db = client["cafetrio"] 
+users_collection = db["admins"]  
 menu_collection=db['menus']
 order_collection=db['orders']
 client_collection=db['users']
@@ -52,7 +52,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        # Retrieve user data from MongoDB
+        
         user = users_collection.find_one({"username": username})
         if user and user["password"] == hash_password(password):
             session["logged_in"] = True
@@ -198,6 +198,44 @@ def update_order_status(order_id):
 
     flash("Order status updated successfully!", "success")
     return redirect(url_for("all_orders"))
+
+@app.route("/profile")
+def profile():
+    if "logged_in" not in session:
+        return redirect(url_for("login"))
+
+    user = users_collection.find_one({"_id": ObjectId(session["user_id"])})
+    if not user:
+        flash("User not found!", "danger")
+        return redirect(url_for("home"))
+
+    return render_template("profile.html", user=user)
+
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    if "logged_in" not in session:
+        return redirect(url_for("login"))
+
+    user = users_collection.find_one({"_id": ObjectId(session["user_id"])})
+    if not user:
+        flash("User not found!", "danger")
+        return redirect(url_for("profile"))
+
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+
+    
+    if user["password"] != hash_password(old_password):
+        flash("Old password is incorrect!", "danger")
+        return redirect(url_for("profile"))
+
+    
+    hashed_password = hash_password(new_password)
+    users_collection.update_one({"_id": user["_id"]}, {"$set": {"password": hashed_password}})
+
+    flash("Password updated successfully!", "success")
+    return redirect(url_for("profile"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
