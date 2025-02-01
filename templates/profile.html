@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            padding-top: 150px;
+            padding-top: 100px;
             text-align: center;
             background-image: url("static/images/LoginBG.jpeg");
             background-repeat: no-repeat;
@@ -58,12 +58,67 @@
             color: #ff2f00;
         }
 
+        .profile-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.15); /* Glassmorphism effect */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px); /* Blurry glass effect */
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+        color: white;
+    }
 
-        .profile-container { max-width: 400px; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-        img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; }
-        input, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ddd; }
-        button { background-color: blue; color: white; cursor: pointer; }
-        button:hover { background-color: darkblue; }
+    img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 8px;
+        border: none;
+        background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+    }
+
+    button:hover {
+        background: linear-gradient(45deg, #ff4b2b, #ff416c);
+        transform: scale(1.05);
+    }
+
     </style>
 </head>
 <body>
