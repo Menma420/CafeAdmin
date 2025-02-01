@@ -9,8 +9,8 @@ app.secret_key = "your_secret_key"  # Required for session handling
 
 # MongoDB Atlas Connection
 client = MongoClient("mongodb+srv://cafetrio606142:iiitcafe123@cluster0.k6mvr.mongodb.net/cafetrio?retryWrites=true&w=majority&appName=Cluster0")
-db = client["cafetrio"]  # Replace with your database name
-users_collection = db["admins"]  # Collection for storing user data
+db = client["cafetrio"] 
+users_collection = db["admins"]  
 menu_collection=db['menus']
 order_collection=db['orders']
 client_collection=db['users']
