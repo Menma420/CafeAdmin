@@ -6,6 +6,7 @@ from bson import ObjectId
 from flask_pymongo import PyMongo
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Required for session handling
+import smtplib
 
 # MongoDB Atlas Connection
 client = MongoClient("mongodb+srv://cafetrio606142:iiitcafe123@cluster0.k6mvr.mongodb.net/cafetrio?retryWrites=true&w=majority&appName=Cluster0")
@@ -19,6 +20,29 @@ client_collection=db['users']
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+def send_prepared_mail(rec_mail,order_id):
+        # Email Configuration
+    SMTP_SERVER = "smtp.gmail.com"  # Change for Outlook, Yahoo, etc.
+    SMTP_PORT = 587  # 465 for SSL, 587 for TLS
+    EMAIL_SENDER = "jalals.iiita@gmail.com"
+    EMAIL_PASSWORD = "gaej bvcc gbue menw"
+    EMAIL_RECEIVER = rec_mail
+    SUBJECT = "Order Prepared"
+    BODY = f"Hello Sir/Ma'am\n \tYour Order {order_id} is prepared please pick up from Cafeteria!!!\n\n\n TeamCafeTrio"
+
+    # Create email message
+    message = f"Subject: {SUBJECT}\n\n{BODY}"
+
+    try:
+        # Connect to SMTP server
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()  # Secure connection
+        server.login(EMAIL_SENDER, EMAIL_PASSWORD)  # Login to email account
+        server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, message)  # Send email
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
 
 @app.route("/")
 def home():
@@ -185,8 +209,8 @@ def all_orders():
         result.append(order_data)
     return render_template("orders.html", orders=result)
 
-@app.route("/update_order_status/<order_id>", methods=["POST"])
-def update_order_status(order_id):
+@app.route("/update_order_status/<order_id>/<email>", methods=["POST"])
+def update_order_status(order_id,email):
     new_status = request.form.get("status")
 
     if new_status not in ["Pending", "Preparing", "Completed", "Prepared","Cancelled"]:
@@ -197,7 +221,9 @@ def update_order_status(order_id):
         {"_id": ObjectId(order_id)},
         {"$set": {"status": new_status, "updatedAt": datetime.utcnow()}}
     )
-    
+    if(new_status=="Prepared"):
+        send_prepared_mail(str(email),str(order_id))
+
     flash(f"Order {order_id}status updated successfully!", "success")
     return redirect(url_for("all_orders"))
 

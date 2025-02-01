@@ -184,7 +184,7 @@
                     </td>
                     <td>₹{{ order["totalAmount"] }}</td>
                     <td>
-                        <form action="/update_order_status/{{ order['order_id'] }}" method="POST">
+                        <form action="/update_order_status/{{ order['order_id'] }}/{{order['customer']['email']}}" method="POST">
                             <select name="status" required>
                                 <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
                                 <option value="Preparing" {% if order.status == "Preparing" %}selected{% endif %}>Preparing</option>

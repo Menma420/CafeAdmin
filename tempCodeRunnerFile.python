@@ -1,0 +1,26 @@
+import smtplib
+def send_prepared_mail(rec_mail,order_id):
+        # Email Configuration
+    SMTP_SERVER = "smtp.gmail.com"  # Change for Outlook, Yahoo, etc.
+    SMTP_PORT = 587  # 465 for SSL, 587 for TLS
+    EMAIL_SENDER = "jalals.iiita@gmail.com"
+    EMAIL_PASSWORD = "gaej bvcc gbue menw"
+    EMAIL_RECEIVER = rec_mail
+    SUBJECT = "Order Prepared"
+    BODY = f"Hello Sir/Ma'am\n \tYour Order {order_id} is prepared please pick up from Cafeteria!!!\n\n\n TeamCafeTrio"
+
+    # Create email message
+    message = f"Subject: {SUBJECT}\n\n{BODY}"
+
+    try:
+        # Connect to SMTP server
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()  # Secure connection
+        server.login(EMAIL_SENDER, EMAIL_PASSWORD)  # Login to email account
+        server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, message)  # Send email
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+send_prepared_mail("narzeenishant17@gmail.com","81hy272h27282h")
