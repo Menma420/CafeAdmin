@@ -199,5 +199,43 @@ def update_order_status(order_id):
     flash("Order status updated successfully!", "success")
     return redirect(url_for("all_orders"))
 
+@app.route("/profile")
+def profile():
+    if "logged_in" not in session:
+        return redirect(url_for("login"))
+
+    user = users_collection.find_one({"_id": ObjectId(session["user_id"])})
+    if not user:
+        flash("User not found!", "danger")
+        return redirect(url_for("home"))
+
+    return render_template("profile.html", user=user)
+
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    if "logged_in" not in session:
+        return redirect(url_for("login"))
+
+    user = users_collection.find_one({"_id": ObjectId(session["user_id"])})
+    if not user:
+        flash("User not found!", "danger")
+        return redirect(url_for("profile"))
+
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+
+    
+    if user["password"] != hash_password(old_password):
+        flash("Old password is incorrect!", "danger")
+        return redirect(url_for("profile"))
+
+    
+    hashed_password = hash_password(new_password)
+    users_collection.update_one({"_id": user["_id"]}, {"$set": {"password": hashed_password}})
+
+    flash("Password updated successfully!", "success")
+    return redirect(url_for("profile"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
