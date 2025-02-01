@@ -62,7 +62,6 @@ def login():
             session["username"] = username
             session["user_id"]=str(user['_id'])
             return redirect(url_for("home"))
-            #return render_template("dashboard.html")
         flash( "Invalid credentials! Try again" )
     return render_template("login.html")
 
@@ -190,7 +189,7 @@ def all_orders():
 def update_order_status(order_id):
     new_status = request.form.get("status")
 
-    if new_status not in ["Pending", "Preparing", "Completed", "Cancelled"]:
+    if new_status not in ["Pending", "Preparing", "Completed", "Prepared","Cancelled"]:
         flash("Invalid status selected!", "danger")
         return redirect(url_for("all_orders"))
 
@@ -198,8 +197,8 @@ def update_order_status(order_id):
         {"_id": ObjectId(order_id)},
         {"$set": {"status": new_status, "updatedAt": datetime.utcnow()}}
     )
-
-    flash("Order status updated successfully!", "success")
+    
+    flash(f"Order {order_id}status updated successfully!", "success")
     return redirect(url_for("all_orders"))
 
 @app.route("/profile")
