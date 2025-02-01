@@ -16,6 +16,10 @@
             font-family: 'Poppins', sans-serif;
             padding-top: 150px;
             text-align: center;
+            background-image: url("static/images/LoginBG.jpeg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
 
         h2 {
@@ -78,7 +82,8 @@
         <img src="{{ user.get('photo', 'https://via.placeholder.com/100') }}" alt="User Photo">
         <h3>{{ user.get('username', 'Unknown') }}</h3>
         <p>{{ user.get('email', 'No Email') }}</p>
-
+        <p></p>
+        <p></p>
         <h3>Change Password</h3>
         <form action="{{ url_for('change_password') }}" method="post">
             <input type="password" name="old_password" placeholder="Old Password" required>
@@ -94,7 +99,7 @@
             {% endif %}
         {% endwith %}
 
-        <a href="/logout"> LOGOUT </a>    
+        
     </div>
 </body>
 </html>
