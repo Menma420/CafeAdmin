@@ -63,7 +63,7 @@ def login():
             session["user_id"]=str(user['_id'])
             return redirect(url_for("home"))
             #return render_template("dashboard.html")
-        return "Invalid credentials! <a href='/login'>Try again</a>"
+        flash( "Invalid credentials! Try again" )
     return render_template("login.html")
 
 
